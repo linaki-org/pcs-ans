@@ -6,6 +6,7 @@ from time import sleep
 import json
 import pygame
 import applets
+from bvPlayer import VideoPlayer
 #from colorama import Fore
 class Game:
     def __init__(self):
@@ -81,7 +82,6 @@ class Game:
         self.actualObjects={}
         rightZone = self.canvas.create_rectangle(self.WIDTH - self.MOVEZONE, 0, self.WIDTH, self.HEIGHT,
                                                  fill='gray', outline="", stipple='@transparent.xbm')
-        print(self.OFFSET)
         self.canvas.tag_bind(rightZone, "<Button-1>", (lambda e: self.addOffset(self.OFFSET)))
         leftZone = self.canvas.create_rectangle(0, 0, self.MOVEZONE, self.HEIGHT,
                                                 fill='gray', outline="", stipple='@transparent.xbm', )
@@ -132,7 +132,6 @@ class Game:
         self.canvas.update()
 
     def addOffset(self, xOffset, yOffset=0):
-        print(self.OFFSET)
         print("Add offset", xOffset)
         if not ((self.actualRoom["xOffset"]+xOffset<=-1) or (self.actualRoom["xOffset"]+xOffset+self.WIDTH>=self.actualRoom["image"].width())):
             self.actualRoom["xOffset"]+=xOffset
@@ -252,7 +251,13 @@ class Game:
                         continue
                     else:
                         applets.applets[args[1]](self)
-
+                elif name=="video":
+                    pygame.mixer.music.stop()
+                    player = VideoPlayer.VideoPlayer(self.tk, args[1])
+                    player.play()
+                    while not player.player.get_pause():
+                        pass
+                    player.canvas.destroy()
                 else:
                     print("Unknown command : %s"%cmd)
             except IndexError:
