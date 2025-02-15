@@ -15,6 +15,8 @@ class UI:
         self.game.tk = self.gameFrame
         self.game.HEIGHT = 850
         self.game.WIDTH = 1920
+        self.game.ORIGINAL_HEIGHT = 850 #DONT CHANGE
+        self.game.ORIGINAL_WIDTH = 1920 #DONT CHANGE !
         self.use = Button(self.controlFrame, text="Use", command=lambda: self.act("use"))
         self.pickup = Button(self.controlFrame, text="Pick up", command=lambda: self.act("pick"))
         self.lookat = Button(self.controlFrame, text="Look at", command=lambda: self.act("look"))

@@ -16,6 +16,8 @@ class Game:
         self.OBJECTS = "objects/"
         self.WIDTH = 1920
         self.HEIGHT = 1080
+        self.ORIGINAL_HEIGHT=1080
+        self.ORIGINAL_WIDTH=1920
         self.OFFSET = 300
         self.MOVEZONE = 300
         self.tk = None
@@ -44,6 +46,14 @@ class Game:
         if not self.rooms:
             raise ValueError("Rooms.pcs is empty. If you just cloned the github, read the docs at https://pcs-ans.readthedocs.io/")
         self.goRoom("root")
+
+    def recomputePixel(self, x, y):
+        HFactor=self.ORIGINAL_HEIGHT/self.HEIGHT #x/self.ORIGINAL_WIDTH
+        WFactor=self.ORIGINAL_WIDTH/self.WIDTH #y/self.ORIGINAL_HEIGHT
+        print(HFactor, WFactor)
+        newX=int(x/WFactor)
+        newY=int(y/HFactor)
+        return newX, newY
 
     def genObjectHandler(self, id):
         return lambda e: self.ui.handleObject(id)
@@ -100,6 +110,8 @@ class Game:
                 print("Error : object does not exists")
                 continue
             name, files, x, y, height, width, options = self.objects[object]
+            x, y=self.recomputePixel(x, y)
+            width, height=self.recomputePixel(width, height)
             if files[0]:
                 img = Image.open(self.OBJECTS + files[0])
 
@@ -114,7 +126,7 @@ class Game:
                 self.actualObjects[object] = None
                 obId = self.canvas.create_rectangle(x - self.actualRoom["xOffset"], y - self.actualRoom["yOffset"],
                                                     x - self.actualRoom["xOffset"] + width,
-                                                    y - self.actualRoom["yOffset"] + height, fill="gray", outline="",
+                                                    y - self.actualRoom["yOffset"] + height, fill="gray", outline="black",
                                                     stipple="@transparent.xbm")
                 self.canvas.tag_bind(obId, "<Button-1>", self.genObjectHandler(object))
 
@@ -148,6 +160,8 @@ class Game:
 
     def setObjImg(self, obj, id):
         name, files, x, y, height, width, options = self.objects[obj]
+        x, y = self.recomputePixel(x, y)
+        width, height = self.recomputePixel(width, height)
         if id >= len(files):
             raise IndexError("Object images index out of range")
         img = Image.open(self.OBJECTS + files[id])
