@@ -7,7 +7,7 @@ The first game ever created with this wonderful tool was **Bad Tentacles**, the 
 ## Installation
 1. Clone this repo
 2. Use pip3 to install : tkinter (python-tk), pygame and bvPlayer
-3. Code your game using [the official Pcs-Ans guide](https://docs.linaki.org/docs/doc/19)
+3. Code your game using [the official Pcs-Ans guide](https://pcs-ans-new.readthedocs.io/en/latest/)
 4. Start the main.py file
 Enjoy !
 
